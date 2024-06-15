@@ -1,0 +1,27 @@
+<script>
+    const l = [1,2,3];
+    console.log(...l)
+    const l2 = [0,8,...l];
+    console.log(l2);
+    const l3 = [2,5,l]
+    console.log(l3);
+
+    function myFunc(x,y,z) {
+        return x+y+z;
+    }
+    const nums =[10,20,30];
+    console.log(myFunc.apply(null,nums));
+    console.log(myFunc(...nums));
+
+    let obj = {
+        name: '홍길동',
+        age:20,
+        grade:4
+    }
+    let objClone = {...obj}
+    console.log(objClone);
+
+    let dateArr = [1970, 9, 21];
+    const d1 = new Date(dateArr)
+    console.log(d1);
+</script>
