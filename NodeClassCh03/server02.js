@@ -11,7 +11,7 @@ const server = http.createServer((req, res) => {
   // http://localhost:3000/main => /main
   const path =url.parse(req.url,true).pathname;
   res.setHeader('Content-Type', 'text/html;  charset=UTF-8');
-
+ 
   if(path == "/main"){
     res.write("<h2>요청 URI</h2>")
     res.end("</h3>여기는 메인</h3>");
