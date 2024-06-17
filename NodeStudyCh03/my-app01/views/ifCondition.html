@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>템플릿 엔진(Nunjucks)</h1>
+  <h2>if 조건문 사용하기</h2>
+  {# if 조건문 사용 #}
+  {% if isLogin and id == 'admin' %}
+    <p>관리자 메뉴 표시</p>
+  {% endif %}
+  {% if isLogin %}
+    <p>안녕하세요 {{ id }}님~</p>
+  {% else %}
+    <p>로그인이 필요한 서비스 입니다.</p>
+  {% endif %}
+
+  <h3>선호하는 색상</h3>
+  {% if color == 'red' %}
+    <p>빨간색 선택</p>
+  {% elif color == 'blue' %}
+    <p>파란색 선택</p>
+  {% elif color == 'green' %}
+    <p>초록색 선택</p>
+  {% else %}
+    <p>선호하는 색상이 선택되지 않음</p>
+  {% endif %}
+</body>
+</html>

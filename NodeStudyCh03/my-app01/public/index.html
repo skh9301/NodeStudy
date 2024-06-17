@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #formList > li {
+      padding: 3px; margin: 3px;
+    }
+  </style>
+</head>
+<body>
+  <h1>REST(Representational State Transfer) API 요청</h1>  
+  <div id="result"></div>
+  <ul id="formList">
+    <li>
+      <h3>GET : Comment 리스트 요청</h3>
+      <form id="commentListForm">
+        page-num : <input type="text" name="page-num" id="listFormPageNum" value="3"><br>
+        keyword : <input type="text" name="keyword" id="listFormKeyword" value="REST API"><br>
+        <input type="submit" value="리스트 요청">
+      </form>
+    </li>
+    <li>
+      <h3>GET : Comment 조회 요청</h3>
+      <form id="commentForm">
+        no : <input type="text" name="no" id="formNo" value="10"><br>
+        pageNum : <input type="text" name="pageNum" id="formPageNum" value="3"><br>
+        <input type="submit" value="조회 요청">
+      </form>
+    </li>
+    <li>
+      <h3>POST : Comment 쓰기 요청</h3>
+      <form id="writeForm">
+        title : <input type="text" name="title" id="formTitle" value="RESTAPI"><br>
+        writer : <input type="text" name="writer" id="formWriter" value="admin"><br>
+        content : <textarea name="content" id="formContent">REST는 자원을 이름으로</textarea><br>
+        <input type="submit" value="쓰기 요청">
+      </form>
+    </li>
+    <li>
+      <h3>PUT : Comment 수정 요청</h3>
+      <form id="updateForm">
+        <input type="hidden" name="no" id="updateNo" value="30">
+        title : <input type="text" name="title" id="updateTitle" value="RESTAPI 수정"><br>
+        writer : <input type="text" name="writer" id="updateWriter" value="admin"><br>
+        content : <textarea name="content" id="updateContent">자원의 상태(정보)를 주고</textarea><br>
+        <input type="submit" value="수정 요청">
+      </form>
+    </li>  
+    <li>
+      <h3>DELETE : Comment 삭제 요청</h3>
+      <form id="deleteForm">        
+        <input type="text" name="no" id="deleteNo" value="17"><br>
+        <input type="submit" value="삭제 요청">
+      </form>
+    </li>        
+  </ul>
+  <script>
+    // Comment 리스트 요청 폼 서브밋 이벤트 처리
+    const commentListForm = document.querySelector("#commentListForm");
+    commentListForm.addEventListener("submit", (e) => {
+      e.preventDefault(); // 폼이 서브밋 되는 것을 막음
+
+      const pageNum = document.querySelector("#listFormPageNum").value;
+      const keyword = document.querySelector("#listFormKeyword").value;
+      const params = "?page-num=" + pageNum + "&keyword="+ keyword;
+      
+      // comments?page-num=3&keyword=REST API 쿼리스트링 형식으로 요청
+      fetch("comments" + params)
+        .then((res) => res.json()) // JSON 형식으로 받은 응답을 객체로 변환해 반환
+        .then((resObj) => {
+          console.log(resObj);          
+          const tag = "<ul>"
+                      +   "<li> pageNum : " + resObj.pageNum + "</li>"
+                      +   "<li> keyword : " + resObj.keyword + "</li>"
+                      + "</ul>";
+          
+          const result = document.querySelector("#result");
+          result.innerHTML = tag; 
+        });      
+    });
+
+    // Comment 조회 요청 폼 서브밋 이벤트 처리
+    const commentForm = document.querySelector("#commentForm");
+    commentForm.addEventListener("submit", (e) => {
+      e.preventDefault(); // 폼이 서브밋 되는 것을 막음
+      
+      // async/await 방식으로 비동기 처리 함수 정의
+      async function process(no, pageNum, result) {
+        // comments/10/3 경로 변수 형식으로 요청
+        const res = await fetch(`comments/${no}/${pageNum}`);
+        const resObj = await res.json();
+        console.log(resObj);
+
+        const tag = "<ul>"
+                      +   "<li> no : " + resObj.no + "</li>"
+                      +   "<li> pageNum : " + resObj.pageNum + "</li>"
+                      + "</ul>";
+        result.innerHTML = tag;
+      }
+
+      const no = document.querySelector("#formNo").value;
+      const pageNum = document.querySelector("#formPageNum").value;
+      const result = document.querySelector("#result");    
+      
+      // 비동기 처리 함수 호출
+      process(no, pageNum, result);
+    });
+
+    // Comment 쓰기 요청 폼 서브밋 이벤트 처리
+    const writeForm = document.querySelector("#writeForm");
+    writeForm.addEventListener("submit", (e) => {
+      e.preventDefault(); // 폼이 서브밋 되는 것을 막음\
+
+      const title = document.querySelector("#formTitle").value;
+      const writer = document.querySelector("#formWriter").value;
+      const content = document.querySelector("#formContent").value;
+
+      // 요청 본문으로 보낼 데이터를 객체로 만들고 다시 JSON으로 직렬화
+      const params = JSON.stringify({
+        title: title,
+        writer: writer,
+        content: content
+      });
+      
+      // fetch() 함수의 두 번째 인수로 지정할 옵션 객체
+      // https://developer.mozilla.org/ko/docs/Web/API/fetch      
+      const options = {
+        method: "POST",
+        headers: {'Content-Type': 'application/json'}, 
+        body: params
+      }
+
+      // POST 방식으로 요청을 보냄
+      fetch("comments", options)
+        .then((res) => res.json()) // JSON 형식으로 받은 응답을 객체로 변환해 반환
+        .then((resObj) => {
+          console.log(resObj);          
+          const tag = "<ul>"                      
+                      +   "<li> title : " + resObj.title + "</li>"
+                      +   "<li> writer : " + resObj.writer + "</li>"
+                      +   "<li> content : " + resObj.content + "</li>"
+                      + "</ul>";
+          
+          const result = document.querySelector("#result");
+          result.innerHTML = tag; 
+        });
+    });
+
+    // Comment 수정 요청 폼 서브밋 이벤트 처리
+    const updateForm = document.querySelector("#updateForm");
+    updateForm.addEventListener("submit", (e) => {
+      e.preventDefault(); // 폼이 서브밋 되는 것을 막음\
+
+      const no = document.querySelector("#updateNo").value;
+      const title = document.querySelector("#updateTitle").value;
+      const writer = document.querySelector("#updateWriter").value;
+      const content = document.querySelector("#updateContent").value;
+      
+      // fetch() 함수의 두 번째 인수로 지정할 옵션 객체
+      // https://developer.mozilla.org/ko/docs/Web/API/fetch      
+      const options = {
+        method: "PUT",        
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}, 
+        body: `no=${no}&title=${title}&writer=${writer}&content=${content}`
+      }
+
+      // PUT 방식으로 요청을 보냄
+      fetch("comments", options)
+        .then((res) => res.json()) // JSON 형식으로 받은 응답을 객체로 변환해 반환
+        .then((resObj) => {
+          console.log(resObj);          
+          const tag = "<ul>"    
+                      +   "<li> no : " + resObj.no + "</li>"                  
+                      +   "<li> title : " + resObj.title + "</li>"
+                      +   "<li> writer : " + resObj.writer + "</li>"
+                      +   "<li> content : " + resObj.content + "</li>"
+                      +   "<li> update : " + resObj.update + "</li>"
+                      + "</ul>";
+          
+          const result = document.querySelector("#result");
+          result.innerHTML = tag; 
+        });
+    });
+
+    // Comment 삭제 요청 폼 서브밋 이벤트 처리
+    const deleteForm = document.querySelector("#deleteForm");
+    deleteForm.addEventListener("submit", (e) => {
+      e.preventDefault(); // 폼이 서브밋 되는 것을 막음\
+
+      const no = document.querySelector("#deleteNo").value;
+
+      // fetch() 함수의 두 번째 인수로 지정할 옵션 객체
+      // https://developer.mozilla.org/ko/docs/Web/API/fetch      
+      const options = {
+        method: "DELETE",        
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `no=${no}`
+      }
+
+      // DELETE 방식으로 요청을 보냄
+      fetch("comments", options)
+        .then((res) => res.json()) // JSON 형식으로 받은 응답을 객체로 변환해 반환
+        .then((resObj) => {
+          console.log(resObj);          
+          const tag = "<ul>"    
+                      +   "<li> no : " + resObj.no + "</li>"                  
+                      +   "<li> delete : " + resObj.delete + "</li>"
+                      + "</ul>";
+          
+          const result = document.querySelector("#result");
+          result.innerHTML = tag; 
+        });
+    });
+  </script>
+</body>
+</html>
