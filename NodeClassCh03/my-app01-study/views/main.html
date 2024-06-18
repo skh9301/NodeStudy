@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  {# 다음과 같이 include 명령으로 다른 페이지를 포함 시킬 수 있음 #}
+  {% include "header.html" %}
+  <div>
+    <h1>여기는 메인 페이지</h1>
+    {{ data }}
+  </div>
+  {% include "footer.html" %}  
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>템플릿 엔진(Nunjucks)</h1>
+  <h2>변수 사용하기</h2>
+  <!-- 
+    Nunjucks는 HTML 표현을 그대로 사용하며 변수는 이중 중괄호를 이용해 출력
+    index05.js에서 지정한 객체의 키 값을 아래와 같이 중괄호를 사용해 출력
+  -->
+  <p>{{ message }}</p>
+  <p>{{ toDay }}</p>
+  {# 
+    Nunjucks 주석 
+    템플릿 페이지에서 다음과 같이 set 명령으로 변수를 선언할 수 있다. 
+  #}
+  {% set node = "Node.js" %}  
+  {% set template = "Nunjucks" %}
+  <p>{{ node }}</p>
+  <p>{{ template }}</p>
+</body>
+</html>

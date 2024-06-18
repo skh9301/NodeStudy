@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>템플릿 엔진(Nunjucks)</h1>
+  <h2>for in 반복문 사용하기</h2>
+  <ul>
+  {# for 문안에서 loop.index로 현재 인덱스 번호를 출력 #}
+  {% for student in sList %}
+    <li>{{ loop.index }} - {{ loop.count }}{{ student.name }}, 
+        {{ student.grade }}, {{ student.major }}        
+        - {{ '남성' if student.gender == 'male' else '여성' }}</li>
+  {% endfor %}
+  </ul>
+</body>
+</html>
